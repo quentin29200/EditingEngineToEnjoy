@@ -1,5 +1,4 @@
 # EditingEngineToEnjoy
-# MIAGE
 ### ACO - Mini-éditeur
 
 _Projet de M1 MIAGE_  
