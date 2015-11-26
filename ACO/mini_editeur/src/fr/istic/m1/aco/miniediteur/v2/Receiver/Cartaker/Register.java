@@ -7,4 +7,9 @@ import fr.istic.m1.aco.miniediteur.v2.CommandMemento.Originator.CommandRegister;
  */
 public interface Register {
     public void record(CommandRegister c);
+    public void runRecord();
+    public void stopRecord();
+    public void replay();
+    public boolean isRecorded();
+
 }

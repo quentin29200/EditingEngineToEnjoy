@@ -17,6 +17,7 @@ public class RemoveTextCommandRegister extends RemoveTextCommand implements Comm
 
 
     public void execute() {
+        this.reg.record(this);
         super.execute();
     }
 

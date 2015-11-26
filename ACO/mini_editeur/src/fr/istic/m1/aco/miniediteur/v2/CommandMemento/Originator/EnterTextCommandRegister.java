@@ -23,6 +23,7 @@ public class EnterTextCommandRegister extends EnterTextCommand implements Comman
 	}
 
 	public void execute() {
+        this.reg.record(this);
 		super.execute();
 	}
 

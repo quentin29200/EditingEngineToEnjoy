@@ -19,6 +19,7 @@ public class CutRegister extends Cut implements CommandRegister {
 
 
     public void execute() {
+        this.reg.record(this);
         super.execute();
     }
 

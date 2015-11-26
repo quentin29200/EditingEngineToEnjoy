@@ -15,6 +15,7 @@ public class PasteRegister extends Paste implements CommandRegister{
     }
 
     public void execute() {
+        this.reg.record(this);
         super.execute();
     }
 

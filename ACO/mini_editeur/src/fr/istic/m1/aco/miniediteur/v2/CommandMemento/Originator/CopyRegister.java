@@ -18,6 +18,7 @@ public class CopyRegister extends Copy implements CommandRegister {
     }
 
     public void execute() {
+        this.reg.record(this);
         super.execute();
     }
     

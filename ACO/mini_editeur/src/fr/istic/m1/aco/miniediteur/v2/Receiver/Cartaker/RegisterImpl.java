@@ -29,11 +29,13 @@ public class RegisterImpl implements Register {
     }
 
     public void runRecord() {
+        System.out.println("Start recorded");
         this.mementos.clear();
         this.isRecorded = true;
     }
 
     public void stopRecord() {
+        System.out.println("Stop recorded");
         this.isRecorded = false;
     }
 
@@ -45,13 +47,19 @@ public class RegisterImpl implements Register {
         }
     }
 
+    public boolean isRecorded() {
+        return isRecorded;
+    }
+
     public void replay() {
         // If the record is stop
         if (!isRecorded) {
             Iterator<Memento> it = mementos.iterator();
+            System.out.println("youhou");
             while (it.hasNext()) {
                 Memento m = it.next();
                 String cmd = m.getCmd();
+                System.out.println("Commande à executer : "+cmd);
                 switch (cmd) {
                     case "Copy":
                         CopyRegister cpr = new CopyRegister(this.engine, this);

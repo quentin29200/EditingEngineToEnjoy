@@ -11,12 +11,17 @@ package fr.istic.m1.aco.miniediteur.v2.Invoker;
  * ==================================================================================
  */
 import fr.istic.m1.aco.miniediteur.v2.Command.*;
+import fr.istic.m1.aco.miniediteur.v2.CommandMemento.Originator.*;
+import fr.istic.m1.aco.miniediteur.v2.Receiver.Cartaker.Register;
+import fr.istic.m1.aco.miniediteur.v2.Receiver.Cartaker.RegisterImpl;
 import fr.istic.m1.aco.miniediteur.v2.Receiver.EditingEngine;
 import fr.istic.m1.aco.miniediteur.v2.Receiver.EditingEngineImpl;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.HashMap;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -33,29 +38,34 @@ import javax.swing.event.CaretListener;
 public class IHMInvoker extends JFrame  implements Observer
 {
 	private JTextArea textArea;
-	private EditingEngineImpl engine;
     private char lastchar;
+	private boolean isRecorded;
+
+	/* List of command */
 	private Command cut;
 	private Command copy;
 	private Command paste;
 	private Select select;
 	private Command enterTextCommand;
 	private Command removeTextCommand;
-    private boolean isRecorded;
+	private Command startregister;
+	private Command stopregister;
+	private Command replayregister;
 
+	/* List of CommandRegister */
+	private CommandRegister cutrec;
+	private CommandRegister copyrec;
+	private CommandRegister pasterec;
+	private CommandRegister entertxtrec;
+	private CommandRegister removetxtrec;
+
+	/**
+	 *  INITIALIZE IHM
+	 *
+	 */
 
 	public IHMInvoker(EditingEngineImpl e) {
-		// Initialisation du moteur
-		this.engine = e;
-		this.engine.addObserver(this);
-
-		// Initialisation des commandes
-		this.enterTextCommand = new EnterTextCommand(this.engine, this);
-		this.removeTextCommand = new RemoveTextCommand(this.engine, this);
-		this.select = new Select(this.engine, this);
-		this.cut = new Cut(this.engine);
-		this.copy = new Copy(this.engine);
-		this.paste = new Paste(this.engine);
+		this.isRecorded = false;
 
 		// Chargement des images
 		Icon img_copy = new ImageIcon(this.getClass().getResource("img/copier.png"));
@@ -95,7 +105,7 @@ public class IHMInvoker extends JFrame  implements Observer
 		button_cut.setIcon(img_cut);
 	    button_cut.addActionListener(new java.awt.event.ActionListener() {
 	        public void actionPerformed(java.awt.event.ActionEvent evt) {
-	            button_cutActionPerformed(evt);
+				button_cutActionPerformed(evt);
 	        }
 	    });
 
@@ -117,17 +127,25 @@ public class IHMInvoker extends JFrame  implements Observer
 
         button_replay.setIcon(img_replay);
         button_replay.setEnabled(false);
+		button_replay.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				replayregister.execute();
+			}
+		});
 
 		button_record.setIcon(img_rec);
         button_record.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 if (isRecorded) {
                     button_record.setIcon(img_rec);
-                    isRecorded = false;
+					stopregister.execute();
+					isRecorded = false;
                     button_replay.setEnabled(true);
                 } else {
                     button_record.setIcon(img_stop);
-                    isRecorded = true;
+					button_replay.setEnabled(false);
+					startregister.execute();
+					isRecorded = true;
                 }
             }
         });
@@ -168,7 +186,11 @@ public class IHMInvoker extends JFrame  implements Observer
                 e.consume();
 				lastchar = e.getKeyChar();
 				if (lastchar != '\b') {
-					enterTextCommand.execute();
+					if (isRecorded) {
+                        entertxtrec.execute();
+					} else {
+                        enterTextCommand.execute();
+					}
 				}
 			}
 
@@ -177,7 +199,11 @@ public class IHMInvoker extends JFrame  implements Observer
 
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
-					removeTextCommand.execute();
+					if (isRecorded) {
+                        removetxtrec.execute();
+					} else {
+                        removeTextCommand.execute();
+					}
 				}
 			}
 		});
@@ -229,51 +255,66 @@ public class IHMInvoker extends JFrame  implements Observer
 	    setJMenuBar(menu);
 
         this.getContentPane().add(content);
-        /*
-	    javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-	    getContentPane().setLayout(layout);
-	    layout.setHorizontalGroup(
-	        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-	        .addGroup(layout.createSequentialGroup()
-	            .addContainerGap()
-	            .addComponent(button_copy, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
-	            .addGap(126, 126, 126)
-	            .addComponent(button_cut, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
-	            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-	            .addComponent(button_paste, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
-	            .addContainerGap())
-	        .addGroup(layout.createSequentialGroup()
-	            .addGap(24, 24, 24)
-	            .addComponent(textArea, javax.swing.GroupLayout.PREFERRED_SIZE, 501, javax.swing.GroupLayout.PREFERRED_SIZE)
-	            .addContainerGap(32, Short.MAX_VALUE))
-	    );
-	    layout.setVerticalGroup(
-	        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-	        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-	            .addContainerGap(66, Short.MAX_VALUE)
-	            .addComponent(textArea, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
-	            .addGap(65, 65, 65)
-	            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-	                .addComponent(button_paste, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-	                .addComponent(button_copy, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-	                .addComponent(button_cut, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
-	            .addContainerGap())
-	    );
-        */
+
 	    pack();
 	}
 
-    private void button_pasteActionPerformed(java.awt.event.ActionEvent evt) {
-		System.out.println("button_cutActionPerformed called in IHMInvoker YEAAAAAH");
-		paste.execute();
+	/**
+	 * INITIALIZE COMMANDS AND COMMANDS REGISTER FROM HASHMAP
+	 *
+	 */
+
+	public void addcmds(HashMap<String, Command> h) {
+		// Initialisation des commandes
+		this.enterTextCommand = h.get("enterTextCommand");
+		this.removeTextCommand = h.get("removeTextCommand");
+		this.select = (Select)h.get("select");
+		this.cut = h.get("cut");
+		this.copy = h.get("copy");
+		this.paste = h.get("paste");
+		this.startregister = h.get("startregister");
+		this.stopregister = h.get("stopregister");
+		this.replayregister = h.get("replayregister");
+	}
+
+	public void addcmdsrec(HashMap<String, CommandRegister> h) {
+		// Initialisation des commandes enregistrables
+		this.entertxtrec = h.get("entertxtrec");
+		this.removetxtrec = h.get("removetxtrec");
+		this.cutrec = h.get("cutrec");
+		this.copyrec = h.get("copyrec");
+		this.pasterec = h.get("pasterec");
+	}
+
+
+	/**
+	 *  LISTENERS FOR BUTTUNS
+	 *
+	 */
+
+	private void button_pasteActionPerformed(java.awt.event.ActionEvent evt) {
+		System.out.println("button_cutActionPerformed called in IHMInvoker");
+		if (this.isRecorded) {
+			pasterec.execute();
+		} else {
+			paste.execute();
+		}
     }
 	private void button_copyActionPerformed(java.awt.event.ActionEvent evt) {
-		System.out.println("button_cutActionPerformed called in IHMInvoker YEAAAAAH");
-		copy.execute();
+		System.out.println("button_cutActionPerformed called in IHMInvoker");
+		if (this.isRecorded) {
+			copyrec.execute();
+		} else {
+			copy.execute();
+		}
 	}
 	private void button_cutActionPerformed(java.awt.event.ActionEvent evt) {
-		System.out.println("button_cutActionPerformed called in IHMInvoker YEAAAAAH");
-		cut.execute();
+		System.out.println("button_cutActionPerformed called in IHMInvoker");
+		if (this.isRecorded) {
+			cutrec.execute();
+		} else {
+			cut.execute();
+		}
 	}
 
 	private void menu_edit_cutActionPerformed(java.awt.event.ActionEvent evt) {
@@ -299,7 +340,7 @@ public class IHMInvoker extends JFrame  implements Observer
     public void update(Observable o, Object arg) {
 		System.out.println("Update IHM");
 		if(o instanceof EditingEngine){
-			this.textArea.setText(this.engine.getBuffer().toString());
+			this.textArea.setText(((EditingEngine) o).getBuffer().toString());
 		}
 	}
 }
