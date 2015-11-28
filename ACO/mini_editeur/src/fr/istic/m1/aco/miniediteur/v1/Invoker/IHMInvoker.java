@@ -11,8 +11,8 @@ package fr.istic.m1.aco.miniediteur.v1.Invoker;
  * ==================================================================================
  */
 import fr.istic.m1.aco.miniediteur.v1.Command.*;
-import fr.istic.m1.aco.miniediteur.v1.Receiver.EditingEngine;
-import fr.istic.m1.aco.miniediteur.v1.Receiver.EditingEngineImpl;
+import fr.istic.m1.aco.miniediteur.v1.Command.Select;
+import fr.istic.m1.aco.miniediteur.v1.Receiver.*;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -248,8 +248,22 @@ public class IHMInvoker extends JFrame  implements Observer
 
     public void update(Observable o, Object arg) {
 		System.out.println("Update IHM");
+		System.out.println(o.toString());
 		if(o instanceof EditingEngine){
-			this.textArea.setText(this.engine.getBuffer().toString());
+			EditingEngine engine = (EditingEngine)o;
+			final String txt = engine.getBuffer().getAreaTxt().toString();
+			final int start = engine.returnSelect().getBegin();
+			final int end = start + engine.returnSelect().getLength();
+
+			SwingUtilities.invokeLater(new Runnable() {
+				public void run() {
+					textArea.setText(txt);
+					textArea.setCaretPosition(start);
+					textArea.moveCaretPosition(end);
+					System.out.println("position curseur moteur" + start);
+					System.out.println("position curseur ihm" + end);
+				}
+			});
 		}
 	}
 }

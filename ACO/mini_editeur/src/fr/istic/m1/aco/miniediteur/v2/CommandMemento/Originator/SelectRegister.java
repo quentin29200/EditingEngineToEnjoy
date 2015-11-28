@@ -9,23 +9,27 @@ import fr.istic.m1.aco.miniediteur.v2.Receiver.EditingEngine;
 
 public class SelectRegister extends Select implements CommandRegister {
     private Register reg;
+    private EditingEngine engine;
 
     public SelectRegister(EditingEngine engine, IHMInvoker ihm, Register reg) {
         super(engine, ihm);
+        this.engine = engine;
         this.reg = reg;
     }
 
     public void execute() {
+        this.reg.record(this);
         super.execute();
     }
 
     public Memento getMemento() {
         System.out.println("SelectRegister : Enregistrement dans le Memento");
-        return new SelectMemento();
+        return new SelectMemento(this.engine.returnSelect().getBegin(), this.engine.returnSelect().getLength());
     }
 
     public void setMemento(Memento m) {
         System.out.println("SelectRegister : Execute une commande enregistrée");
-        this.execute();
+        this.engine.select(((SelectMemento)m).getSelect_start(),((SelectMemento)m).getSelect_lenght());
+        //this.execute();
     }
 }

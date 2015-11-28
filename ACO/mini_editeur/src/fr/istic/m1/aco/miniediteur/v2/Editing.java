@@ -59,6 +59,8 @@ public class Editing {
         cmdsrec.put("copyrec",copyrec);
         CommandRegister pasterec = new PasteRegister(e, r);
         cmdsrec.put("pasterec",pasterec);
+        CommandRegister selectrec = new SelectRegister(e,ihm, r);
+        cmdsrec.put("selectrec",selectrec);
 
         ihm.addcmdsrec(cmdsrec);
 

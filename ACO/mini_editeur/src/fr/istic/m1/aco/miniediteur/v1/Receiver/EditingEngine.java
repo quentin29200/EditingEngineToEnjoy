@@ -9,4 +9,5 @@ public interface EditingEngine {
    public void enterchar(char c);
    public void remove();
    public Buffer getBuffer();
+   public Select returnSelect();
 }
