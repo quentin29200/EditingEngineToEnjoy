@@ -1,76 +1,119 @@
 package fr.istic.m1.aco.miniediteur.v2.Receiver;
 
-import fr.istic.m1.aco.miniediteur.v2.Receiver.Buffer;
-import fr.istic.m1.aco.miniediteur.v2.Receiver.Clipboard;
-import fr.istic.m1.aco.miniediteur.v2.Receiver.EditingEngine;
-
 import java.util.Observable;
 
-
+/**
+ * <b>EditingEngineImpl is the implementation of the interface of the engine.</b>
+ * <p>
+ * The engine will interact with quite everything.
+ * It extends Observable to call the ConcreteCommand methods.
+ * It implements EditingEngine interface.
+ * </p>
+ *
+ * @version 2.0
+ */
 public class EditingEngineImpl extends Observable implements EditingEngine  {
-   // =========
-   // VARIABLES
-   // =========
+
+    /**
+     * The buffer
+     * Its content is binded with the content of the JTextArea.
+     */
     private Buffer buffer;
+
+    /**
+     * The clipboard
+     * Its content will be used to paste strings.
+     */
     private Clipboard clipboard;
+
+    /**
+     * The select
+     * If select.length > 0  : Its content can be copy or cut.
+     */
     private Select select;
 
-   public EditingEngineImpl() {
-      this.buffer = new Buffer();
-      this.clipboard = new Clipboard();
-      this.select = new Select();
-   }
+    /**
+     * Constructor of the EditingEngineImpl
+     * Initialize a new Buffer, a new Clipboard and a new SelectCommand object.
+     */
+    public EditingEngineImpl() {
+        this.buffer = new Buffer();
+        this.clipboard = new Clipboard();
+        this.select = new Select();
+    }
 
+    /**
+     * getBuffer method
+     * Get the content of the buffer.
+     *
+     * @return Buffer
+     *  content of the buffer
+     */
     public Buffer getBuffer() {
         return buffer;
     }
 
     /**
-    * Method 		: selectionner()
-    * Parameters 	: None
-    * Objectives 	: Get the text which has been selected by the user
-    */
-   public void select(int begin, int length) {
-      if(begin >= 0 && length>=0) {
-         this.select.setBegin(begin);
-         this.select.setLength(length);
-      }
+     * select method
+     * Permits to select some text.
+     */
+    public void select(int begin, int length) {
+        if(begin >= 0 && length>=0) {
+            this.select.setBegin(begin);
+            this.select.setLength(length);
+        }
+    }
 
-   }
+    /**
+     * getselect method
+     * Get the content of the selection.
+     *
+     * @return String
+     *  content of the selection (not the object)
+     */
+    public String getselect(){
+        // Start index of the selection
+        int begin = this.select.getBegin();
+        // Length of the selection (to calculate the end index of the selection)
+        int length = this.select.getLength();
+        // If there is a string or a character selected
+        if (length > 0 ) {
+            // Return only the substring corresponding to the selection
+            return this.buffer.getAreaTxt().substring(begin,begin+length);
+        } else {
+            // Return an empty string
+            return "";
+        }
+    }
 
+    /**
+     * returnSelect method
+     * Get the object SelectCommand used with our engine.
+     *
+     * @return SelectCommand
+     *  Object SelectCommand
+     */
     public Select returnSelect() {
         return this.select;
     }
 
-   public String getselect(){
-      // Dans le buffer (contenu de notre fichier courant)
-      // On recupere l'indice de depart
-      // et on recpere dans une variable le contenu du texte a partir de l'indice de
-      // depart jusqu'a l'indice de depart + longueur
-      int begin = this.select.getBegin();
-      int length = this.select.getLength();
-      if (length > 0 ) {
-         return this.buffer.getAreaTxt().substring(begin,begin+length);
-      } else {
-         return "";
-      }
-   }
-
+    /**
+     * enterchar method
+     * Add a new character in the JTextArea.
+     * Add it to the buffer and handle the caret/selection position.
+     */
    public void enterchar(String c) {
        int begin = this.select.getBegin();
        System.out.println("begin" + this.select.getBegin());
-      // String text;
        System.out.println("Add / Before Buffer : "+this.buffer.getAreaTxt().toString());
        if(c=="\n") {
            this.buffer.getAreaTxt().append(c);
        } else {
            if (this.select.getLength() == 0) {
-               //text = this.buffer.getAreaTxt().substring(0, begin) + c + this.buffer.getAreaTxt().substring(begin);
                this.buffer.getAreaTxt().insert(begin, c);
                this.select.setBegin(begin + 1);
                System.out.println("Selection changée à " + this.select.getBegin());
            } else {
-               //text = this.buffer.getAreaTxt().substring(0, begin) + c + this.buffer.getAreaTxt().substring(begin + this.select.getLength());
                this.buffer.getAreaTxt().replace(begin, begin + this.select.getLength(), c);
                this.select.setBegin(begin + 1);
                this.select.setLength(0);
@@ -81,6 +124,10 @@ public class EditingEngineImpl extends Observable implements EditingEngine  {
        notifyObservers();
    }
 
+    /**
+     * remove method
+     * Remove the content of the selection (if exists) or the character just before the caret.
+     */
     public void remove() {
         int begin = this.select.getBegin();
         System.out.println("Remove / Before Buffer : "+this.buffer.getAreaTxt().toString());
@@ -95,6 +142,11 @@ public class EditingEngineImpl extends Observable implements EditingEngine  {
         notifyObservers();
     }
 
+    /**
+     * copy method
+     * CopyCommand the content of the selection and put it inside the clipboard.
+     * It doesn't remove the content of the current selection.
+     */
     public void copy() {
         // If something is selected
         if( this.select.getLength()>0 ) {
@@ -104,6 +156,11 @@ public class EditingEngineImpl extends Observable implements EditingEngine  {
         }
     }
 
+    /**
+     * cut method
+     * CutCommand the content of the selection and put it inside the clipboard.
+     * It removes the content of the current selection.
+     */
     public void cut() {
         // Transfers the currently selected range in the associated text area to the clipboard,
         // removing the contents from the text area. The current selection is reset. Does nothing for null selections.
@@ -139,7 +196,12 @@ public class EditingEngineImpl extends Observable implements EditingEngine  {
             this.notifyObservers();
         }
     }
-   
+
+    /**
+     * paste method
+     * PasteCommand the content of the clipboard and put it inside the buffer.
+     * It doesn't remove the content of the current clipboard.
+     */
     public void paste() {
         // Offset of the caret
         int offsetCaret = this.select.getBegin();

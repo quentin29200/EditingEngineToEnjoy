@@ -1,13 +1,13 @@
 package fr.istic.m1.aco.miniediteur.v2.CommandMemento.Originator;
 
-import fr.istic.m1.aco.miniediteur.v2.Command.Select;
+import fr.istic.m1.aco.miniediteur.v2.Command.SelectCommand;
 import fr.istic.m1.aco.miniediteur.v2.CommandMemento.Memento.Memento;
 import fr.istic.m1.aco.miniediteur.v2.CommandMemento.Memento.SelectMemento;
 import fr.istic.m1.aco.miniediteur.v2.Invoker.IHMInvoker;
 import fr.istic.m1.aco.miniediteur.v2.Receiver.Cartaker.Register;
 import fr.istic.m1.aco.miniediteur.v2.Receiver.EditingEngine;
 
-public class SelectRegister extends Select implements CommandRegister {
+public class SelectRegister extends SelectCommand implements CommandRegister {
     private Register reg;
     private EditingEngine engine;
 

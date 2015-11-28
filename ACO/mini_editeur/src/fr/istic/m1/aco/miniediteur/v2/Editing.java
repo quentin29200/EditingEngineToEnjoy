@@ -9,8 +9,24 @@ import fr.istic.m1.aco.miniediteur.v2.Receiver.EditingEngineImpl;
 
 import java.util.HashMap;
 
+/**
+ * <b>Editing is the client of the application (DP Command).</b>
+ * <p>
+ * The engine will interact with quite everything.
+ * Used to run the application and set visible the IHM.
+ * </p>
+ *
+ * @version 2.0
+ */
 public class Editing {
 
+    /**
+     * Main method of the application.
+     * Run all the application.
+     *
+     * @param args
+     *  Tab of arguments passed in CLI (unused in our case).
+     */
     public static void main(String args[]) {
         // Engine creation
         EditingEngineImpl e = new EditingEngineImpl();
@@ -31,17 +47,17 @@ public class Editing {
         cmds.put("enterTextCommand",enterTextCommand);
         Command removeTextCommand = new RemoveTextCommand(e, ihm);
         cmds.put("removeTextCommand",removeTextCommand);
-        Command select = new Select(e, ihm);
+        Command select = new SelectCommand(e, ihm);
         cmds.put("select",select);
-        Command cut = new Cut(e);
+        Command cut = new CutCommand(e);
         cmds.put("cut",cut);
-        Command copy = new Copy(e);
+        Command copy = new CopyCommand(e);
         cmds.put("copy",copy);
-        Command paste = new Paste(e);
+        Command paste = new PasteCommand(e);
         cmds.put("paste",paste);
-        Command startregister = new StartRecord(r);
+        Command startregister = new StartRecordCommand(r);
         cmds.put("startregister",startregister);
-        Command stopregister = new StopRecord(r);
+        Command stopregister = new StopRecordCommand(r);
         cmds.put("stopregister",stopregister);
         Command replayregister = new ReplayCommand(r);
         cmds.put("replayregister",replayregister);
@@ -53,7 +69,7 @@ public class Editing {
         cmdsrec.put("entertxtrec",entertxtrec);
         CommandRegister removetxtrec = new RemoveTextCommandRegister(e, ihm, r);
         cmdsrec.put("removetxtrec",removetxtrec);
-        CommandRegister cutrec = new CutRegister(e, r);
+        CommandRegister cutrec = new CutCommandRegister(e, r);
         cmdsrec.put("cutrec",cutrec);
         CommandRegister copyrec = new CopyRegister(e, r);
         cmdsrec.put("copyrec",copyrec);

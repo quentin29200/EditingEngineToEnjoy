@@ -1,20 +1,12 @@
-/**
- * ==================================================================================
- * PACKAGE
- * ==================================================================================
- */
 package fr.istic.m1.aco.miniediteur.v2.Invoker;
 
-/**
- * ==================================================================================
- * IMPORTS
- * ==================================================================================
- */
 import fr.istic.m1.aco.miniediteur.v2.Command.*;
 import fr.istic.m1.aco.miniediteur.v2.CommandMemento.Originator.*;
 import fr.istic.m1.aco.miniediteur.v2.Receiver.EditingEngine;
 import fr.istic.m1.aco.miniediteur.v2.Receiver.EditingEngineImpl;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.HashMap;
@@ -25,45 +17,117 @@ import javax.swing.*;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 
-
 /**
- * ==================================================================================
- * CLASS START
- * ==================================================================================
+ * <b>IHMInvoker is an Invoker (DP Command)</b>
+ * <p>
+ * Used as the user interface.
+ * Extends JFrame for the interface.
+ * Implements Observer to call the actions on click.
+ * </p>
+ *
+ * @version 2.0
  */
-public class IHMInvoker extends JFrame  implements Observer
-{
-	private JTextArea textArea;
-    private String lastchar;
-	private boolean isRecorded;
-
-	/* List of command */
-	private Command cut;
-	private Command copy;
-	private Command paste;
-	private Select select;
-	private Command enterTextCommand;
-	private Command removeTextCommand;
-	private Command startregister;
-	private Command stopregister;
-	private Command replayregister;
-
-	/* List of CommandRegister */
-	private CommandRegister cutrec;
-	private CommandRegister copyrec;
-	private CommandRegister pasterec;
-	private CommandRegister entertxtrec;
-	private CommandRegister removetxtrec;
+public class IHMInvoker extends JFrame  implements Observer {
 
 	/**
-	 *  INITIALIZE IHM
-	 *
+	 * The JTextArea
+	 * Contains the text written by the user.
 	 */
+	private JTextArea textArea;
 
+	/**
+	 * The last character written by the user.
+	 */
+    private String lastchar;
+
+	/**
+	 * To know if the user launch runRecord() or not.
+	 */
+	private boolean isRecorded;
+
+	/**
+	 * The cut Command - Call the Command interface.
+	 */
+	private Command cut;
+
+	/**
+	 * The copy Command - Call the Command interface.
+	 */
+	private Command copy;
+
+	/**
+	 * The paste Command - Call the Command interface.
+	 */
+	private Command paste;
+
+	/**
+	 * The select Command - Call the Command interface.
+	 */
+	private SelectCommand select;
+
+	/**
+	 * The enterTextCommand Command - Call the Command interface.
+	 */
+	private Command enterTextCommand;
+
+	/**
+	 * The removeTextCommand Command - Call the Command interface.
+	 */
+	private Command removeTextCommand;
+
+	/**
+	 * The startregister Command - Call the Command interface.
+	 */
+	private Command startregister;
+
+	/**
+	 * The stopregister Command - Call the Command interface.
+	 */
+	private Command stopregister;
+
+	/**
+	 * The replayregister Command - Call the Command interface.
+	 */
+	private Command replayregister;
+
+    /**
+     * The cutrec Command - Call the CommandRegister interface.
+     */
+	private CommandRegister cutrec;
+
+    /**
+     * The copyrec Command - Call the CommandRegister interface.
+     */
+	private CommandRegister copyrec;
+
+    /**
+     * The pasterec Command - Call the CommandRegister interface.
+     */
+	private CommandRegister pasterec;
+
+    /**
+     * The entertxtrec Command - Call the CommandRegister interface.
+     */
+	private CommandRegister entertxtrec;
+
+    /**
+     * The removetxtrec Command - Call the CommandRegister interface.
+     */
+	private CommandRegister removetxtrec;
+
+    /**
+     * Constructor of the user interface.
+     * Bind the engine and the IHM.
+     *
+     * @param e
+     *  EditingEngineImpl - Implements EditingEngine
+     */
 	public IHMInvoker(EditingEngineImpl e) {
+
+        // We don't run the record process since the beginning
 		this.isRecorded = false;
 
-		// Chargement des images
+		// Button icons loading
 		Icon img_copy = new ImageIcon(this.getClass().getResource("img/copier.png"));
 		Icon img_paste = new ImageIcon(this.getClass().getResource("img/coller.png"));
 		Icon img_cut = new ImageIcon(this.getClass().getResource("img/couper.png"));
@@ -71,14 +135,14 @@ public class IHMInvoker extends JFrame  implements Observer
 		Icon img_replay = new ImageIcon(this.getClass().getResource("img/repeter.png"));
         Icon img_stop = new ImageIcon(this.getClass().getResource("img/stop.png"));
 
-		// Initialisation de l'interface
+		// Buttons creation
 		JButton button_cut = new JButton();
 		JButton button_paste = new JButton();
 		JButton button_copy = new JButton();
 		JButton button_record = new JButton();
 		JButton button_replay = new JButton();
-		this.textArea = new JTextArea();
 
+        // Frame settings
 	    setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 	    setTitle("EditingEngine to enjoy !");
 	    setFont(new java.awt.Font("Mangal", 0, 14)); // NOI18N
@@ -88,41 +152,43 @@ public class IHMInvoker extends JFrame  implements Observer
 	    setName("superFrame"); // NOI18N
 	    setResizable(false);
 
-	    //button_cut.setText("CutCommand");
+        // Button CUT
 		button_cut.setIcon(img_cut);
-	    button_cut.addActionListener(new java.awt.event.ActionListener() {
-	        public void actionPerformed(java.awt.event.ActionEvent evt) {
+	    button_cut.addActionListener(new ActionListener() {
+	        public void actionPerformed(ActionEvent evt) {
 				button_cutActionPerformed(evt);
 	        }
 	    });
 
-	    //button_paste.setText("PasteCommand");
+        // Button PASTE
         button_paste.setIcon(img_paste);
-		button_paste.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
+		button_paste.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
 				button_pasteActionPerformed(evt);
 			}
 		});
 
-	    //button_copy.setText("CopyCommand");
+        // Button COPY
         button_copy.setIcon(img_copy);
-		button_copy.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
+		button_copy.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
 				button_copyActionPerformed(evt);
 			}
 		});
 
+        // Button REPLAY
         button_replay.setIcon(img_replay);
         button_replay.setEnabled(false);
-		button_replay.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
+		button_replay.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
 				replayregister.execute();
 			}
 		});
 
+        // Button RECORD
 		button_record.setIcon(img_rec);
-        button_record.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        button_record.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
                 if (isRecorded) {
                     button_record.setIcon(img_rec);
 					stopregister.execute();
@@ -137,13 +203,15 @@ public class IHMInvoker extends JFrame  implements Observer
             }
         });
 
-
+        // JPanels and layout creation
         JPanel content = new JPanel();
         content.setLayout(new BoxLayout(content, BoxLayout.PAGE_AXIS));
-
         JPanel panel = new JPanel();
-        //On définit le layout en lui indiquant qu'il travaillera en ligne
+
+        // Layout will work in line
         panel.setLayout(new BoxLayout(panel, BoxLayout.LINE_AXIS));
+
+        // Add buttons to the panel
         panel.add(button_copy);
         panel.add(button_cut);
         panel.add(button_paste);
@@ -151,13 +219,14 @@ public class IHMInvoker extends JFrame  implements Observer
         panel.add(button_replay);
         content.add(panel);
 
-        /* TEXT AREA */
+        // JPanel creation and settings
         JPanel panelArea = new JPanel();
         textArea = new JTextArea(30, 60);
         textArea.setLineWrap(true);
-		textArea.setToolTipText("");
         panelArea.add(textArea);
         content.add(panelArea);
+
+        // Caret settings
 		CaretListener caret = new CaretListener() {
 			public void caretUpdate(CaretEvent e) {
 				int i = Math.min(e.getDot(), e.getMark());
@@ -204,21 +273,25 @@ public class IHMInvoker extends JFrame  implements Observer
 			}
 		});
 
+        // Add the previous element to the panel
         this.getContentPane().add(content);
 
+        // Set visible the frame and the elements themselves
 	    pack();
 	}
 
-	/**
-	 * INITIALIZE COMMANDS AND COMMANDS REGISTER FROM HASHMAP
-	 *
-	 */
-
+    /**
+     *
+     * addcmds method
+     * Initialize the commands of the IHM.
+     *
+     * @param h
+     *  Contains a string and the associated ConcreteCommands
+     */
 	public void addcmds(HashMap<String, Command> h) {
-		// Initialisation des commandes
 		this.enterTextCommand = h.get("enterTextCommand");
 		this.removeTextCommand = h.get("removeTextCommand");
-		this.select = (Select)h.get("select");
+		this.select = (SelectCommand)h.get("select");
 		this.cut = h.get("cut");
 		this.copy = h.get("copy");
 		this.paste = h.get("paste");
@@ -227,8 +300,15 @@ public class IHMInvoker extends JFrame  implements Observer
 		this.replayregister = h.get("replayregister");
 	}
 
+    /**
+     *
+     * addcmdsrec method
+     * Initialize the recordable commands of the IHM.
+     *
+     * @param h
+     *  Contains a string and the associated ConcreteCommands
+     */
 	public void addcmdsrec(HashMap<String, CommandRegister> h) {
-		// Initialisation des commandes enregistrables
 		this.entertxtrec = h.get("entertxtrec");
 		this.removetxtrec = h.get("removetxtrec");
 		this.cutrec = h.get("cutrec");
@@ -236,53 +316,30 @@ public class IHMInvoker extends JFrame  implements Observer
 		this.pasterec = h.get("pasterec");
 	}
 
-
-	/**
-	 *  LISTENERS FOR BUTTUNS
-	 *
-	 */
-
-	private void button_pasteActionPerformed(java.awt.event.ActionEvent evt) {
-		System.out.println("button_cutActionPerformed called in IHMInvoker");
-		if (this.isRecorded) {
-			pasterec.execute();
-		} else {
-			paste.execute();
-		}
+    // List of the actionPerformed methods to execute the ConcreteCommand
+	private void button_pasteActionPerformed(ActionEvent evt) {
+		if (this.isRecorded) { pasterec.execute(); } else { paste.execute(); }
     }
-	private void button_copyActionPerformed(java.awt.event.ActionEvent evt) {
-		System.out.println("button_cutActionPerformed called in IHMInvoker");
-		if (this.isRecorded) {
-			copyrec.execute();
-		} else {
-			copy.execute();
-		}
+	private void button_copyActionPerformed(ActionEvent evt) {
+		if (this.isRecorded) { copyrec.execute(); } else { copy.execute(); }
 	}
-	private void button_cutActionPerformed(java.awt.event.ActionEvent evt) {
-		System.out.println("button_cutActionPerformed called in IHMInvoker");
-		if (this.isRecorded) {
-			cutrec.execute();
-		} else {
-			cut.execute();
-		}
+	private void button_cutActionPerformed(ActionEvent evt) {
+		if (this.isRecorded) { cutrec.execute(); } else { cut.execute(); }
 	}
 
-	public int getselectstart() {
-		return this.textArea.getSelectionStart();
-	}
+    // Return the index of the beginning of the selection
+    public int getselectstart() { return this.textArea.getSelectionStart(); }
 
-	public int getselectend() {
-		return this.textArea.getSelectionEnd();
-	}
+    // Return the index of the ending of the selection
+    public int getselectend() { return this.textArea.getSelectionEnd(); }
 
-	public JTextArea getTextArea() {
-		return textArea;
-	}
+    // Return the content of the JTextArea
+    public JTextArea getTextArea() { return textArea; }
 
-    public String getLastchar() {
-        return lastchar;
-    }
+    // Return the last character written by the user
+    public String getLastchar() { return lastchar; }
 
+    // Update the content of the buffer, the JTextArea and the position of the caret
     public void update(Observable o, Object arg) {
 		System.out.println("Update IHM");
 		if(o instanceof EditingEngine){

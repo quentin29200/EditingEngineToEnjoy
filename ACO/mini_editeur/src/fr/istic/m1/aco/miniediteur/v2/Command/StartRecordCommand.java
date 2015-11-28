@@ -3,14 +3,14 @@ package fr.istic.m1.aco.miniediteur.v2.Command;
 import fr.istic.m1.aco.miniediteur.v2.Receiver.Cartaker.Register;
 
 /**
- * <b>ReplayCommand is a ConcreteCommand</b>
+ * <b>StartRecordCommand is a ConcreteCommand</b>
  * <p>
- * It permits to replay a sequence of recorded commands.
+ * It permits to start to save a sequence of commands.
  * </p>
  *
  * @version 2.0
  */
-public class ReplayCommand implements Command {
+public class StartRecordCommand implements Command {
 
     /**
      * The register
@@ -22,20 +22,20 @@ public class ReplayCommand implements Command {
 
     /**
      * Constructor of the ConcreteCommand
-     * Bind the IHM and the Memento previously saved.
+     * Bind the IHM and the Memento to save the list of Commands with their parameters.
      *
      * @param r
      *  Register
      */
-    public ReplayCommand(Register r) {
+    public StartRecordCommand(Register r) {
         this.r = r;
     }
 
     /**
      * Execute method
-     * Replay the previously saved sequence.
+     * Start to save the sequence.
      */
     public void execute() {
-        this.r.replay();
+        this.r.runRecord();
     }
 }

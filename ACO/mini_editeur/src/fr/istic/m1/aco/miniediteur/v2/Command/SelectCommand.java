@@ -1,7 +1,7 @@
-package fr.istic.m1.aco.miniediteur.v1.Command;
+package fr.istic.m1.aco.miniediteur.v2.Command;
 
-import fr.istic.m1.aco.miniediteur.v1.Invoker.IHMInvoker;
-import fr.istic.m1.aco.miniediteur.v1.Receiver.EditingEngine;
+import fr.istic.m1.aco.miniediteur.v2.Invoker.IHMInvoker;
+import fr.istic.m1.aco.miniediteur.v2.Receiver.EditingEngine;
 
 /**
  * <b>SelectCommand is a ConcreteCommand</b>
@@ -9,9 +9,9 @@ import fr.istic.m1.aco.miniediteur.v1.Receiver.EditingEngine;
  * It selects a string in the JTextArea.
  * </p>
  *
- * @see fr.istic.m1.aco.miniediteur.v1.Receiver.Clipboard
- * @see fr.istic.m1.aco.miniediteur.v1.Invoker.IHMInvoker
- * @version 1.0
+ * @see fr.istic.m1.aco.miniediteur.v2.Receiver.Clipboard
+ * @see fr.istic.m1.aco.miniediteur.v2.Invoker.IHMInvoker
+ * @version 2.0
  */
 public class SelectCommand implements Command {
 
@@ -71,7 +71,7 @@ public class SelectCommand implements Command {
 
     /**
      * Execute method
-     * SelectCommand a string, a character or an empty content (caret).
+     * Select a string, a character or an empty content (caret).
      */
     public void execute() { this.engine.select(this.start,this.length); }
 }

@@ -1,7 +1,7 @@
 package fr.istic.m1.aco.miniediteur.v1.Receiver;
 
 /**
- * <b>Select is the object which will handle the content of the selection.</b>
+ * <b>SelectCommand is the object which will handle the content of the selection.</b>
  * <p>
  * It permits to handle the stirng selection in the JTextArea.
  * Transmits it to the buffer or the clipboard by function of the called ConcreteCommand.

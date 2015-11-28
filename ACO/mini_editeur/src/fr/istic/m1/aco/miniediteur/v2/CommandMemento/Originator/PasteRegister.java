@@ -1,13 +1,13 @@
 package fr.istic.m1.aco.miniediteur.v2.CommandMemento.Originator;
 
-import fr.istic.m1.aco.miniediteur.v2.Command.Paste;
+import fr.istic.m1.aco.miniediteur.v2.Command.PasteCommand;
 import fr.istic.m1.aco.miniediteur.v2.CommandMemento.Memento.Memento;
 import fr.istic.m1.aco.miniediteur.v2.CommandMemento.Memento.PasteMemento;
 import fr.istic.m1.aco.miniediteur.v2.Receiver.Cartaker.Register;
 import fr.istic.m1.aco.miniediteur.v2.Receiver.EditingEngine;
 import fr.istic.m1.aco.miniediteur.v2.Receiver.Select;
 
-public class PasteRegister extends Paste implements CommandRegister{
+public class PasteRegister extends PasteCommand implements CommandRegister{
     private Register reg;
     private Select s;
 

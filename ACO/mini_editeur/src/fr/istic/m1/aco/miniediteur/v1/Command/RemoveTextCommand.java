@@ -52,5 +52,4 @@ public class RemoveTextCommand implements Command {
     public void execute() {
         this.engine.remove();
     }
-
 }

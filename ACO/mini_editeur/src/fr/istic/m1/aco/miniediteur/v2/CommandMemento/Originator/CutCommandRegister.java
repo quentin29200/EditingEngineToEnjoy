@@ -1,18 +1,18 @@
 package fr.istic.m1.aco.miniediteur.v2.CommandMemento.Originator;
 
 import fr.istic.m1.aco.miniediteur.v2.Command.Command;
-import fr.istic.m1.aco.miniediteur.v2.Command.Cut;
+import fr.istic.m1.aco.miniediteur.v2.Command.CutCommand;
 import fr.istic.m1.aco.miniediteur.v2.CommandMemento.Memento.CutMemento;
 import fr.istic.m1.aco.miniediteur.v2.CommandMemento.Memento.Memento;
 import fr.istic.m1.aco.miniediteur.v2.Receiver.Cartaker.Register;
 import fr.istic.m1.aco.miniediteur.v2.Receiver.EditingEngine;
 
-public class CutRegister extends Cut implements CommandRegister {
+public class CutCommandRegister extends CutCommand implements CommandRegister {
 
     private Command cmd;
     private Register reg;
 
-    public CutRegister(EditingEngine engine, Register reg) {
+    public CutCommandRegister(EditingEngine engine, Register reg) {
         super(engine);
         this.reg = reg;
     }
@@ -24,12 +24,12 @@ public class CutRegister extends Cut implements CommandRegister {
     }
 
     public Memento getMemento() {
-        System.out.println("CutRegister : Enregistrement dans le Memento");
+        System.out.println("CutCommandRegister : Enregistrement dans le Memento");
         return new CutMemento();
     }
 
     public void setMemento(Memento m) {
-        System.out.println("CutRegister : Execute une commande enregistrée");
+        System.out.println("CutCommandRegister : Execute une commande enregistrée");
         this.execute();
     }
 }

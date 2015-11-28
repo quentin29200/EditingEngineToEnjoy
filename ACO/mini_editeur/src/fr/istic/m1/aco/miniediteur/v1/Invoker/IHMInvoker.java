@@ -104,7 +104,7 @@ public class IHMInvoker extends JFrame  implements Observer {
 		JButton button_copy = new JButton();
 		this.textArea = new JTextArea();
 
-        // Add a vertical scrllbar in case there is too much content
+        // Add a vertical scrollbar in case there is too much content
         JScrollPane verticalScroll = new JScrollPane(this.textArea);
         verticalScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         this.add(verticalScroll);

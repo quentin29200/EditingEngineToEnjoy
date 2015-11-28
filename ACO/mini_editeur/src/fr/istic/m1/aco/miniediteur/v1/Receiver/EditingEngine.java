@@ -67,7 +67,7 @@ public interface EditingEngine {
     * returnSelect method
     * Return the selected text (if exists, nothing else) to manipulate it.
     *
-    * @return Select
+    * @return SelectCommand
     *    The text selected by the user.
     */
    public Select returnSelect();

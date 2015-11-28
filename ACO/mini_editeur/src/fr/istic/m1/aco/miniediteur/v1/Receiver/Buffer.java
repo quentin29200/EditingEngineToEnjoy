@@ -55,5 +55,4 @@ public class Buffer {
 	public void setAreaTxt(StringBuffer areaTxt) {
 		this.areaTxt = areaTxt;
 	}
-
 }

@@ -1,13 +1,13 @@
 package fr.istic.m1.aco.miniediteur.v2.CommandMemento.Originator;
 
 import fr.istic.m1.aco.miniediteur.v2.Command.Command;
-import fr.istic.m1.aco.miniediteur.v2.Command.Copy;
+import fr.istic.m1.aco.miniediteur.v2.Command.CopyCommand;
 import fr.istic.m1.aco.miniediteur.v2.CommandMemento.Memento.CopyMemento;
 import fr.istic.m1.aco.miniediteur.v2.CommandMemento.Memento.Memento;
 import fr.istic.m1.aco.miniediteur.v2.Receiver.Cartaker.Register;
 import fr.istic.m1.aco.miniediteur.v2.Receiver.EditingEngine;
 
-public class CopyRegister extends Copy implements CommandRegister {
+public class CopyRegister extends CopyCommand implements CommandRegister {
 
     private Command cmd;
     private Register reg;

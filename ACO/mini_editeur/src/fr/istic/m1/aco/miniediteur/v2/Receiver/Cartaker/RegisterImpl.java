@@ -1,7 +1,6 @@
 package fr.istic.m1.aco.miniediteur.v2.Receiver.Cartaker;
 
 import fr.istic.m1.aco.miniediteur.v2.Invoker.IHMInvoker;
-import fr.istic.m1.aco.miniediteur.v2.Command.EnterTextCommand;
 import fr.istic.m1.aco.miniediteur.v2.CommandMemento.Memento.Memento;
 import fr.istic.m1.aco.miniediteur.v2.CommandMemento.Originator.*;
 import fr.istic.m1.aco.miniediteur.v2.Receiver.EditingEngine;
@@ -10,17 +9,48 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 /**
- * Created by Quentin on 23/11/2015.
+ * <b>RegisterImpl is the implementation of the interface of the register.</b>
+ * <p>
+ * The register will interact with the engine and the IHM.
+ * It implements Register interface.
+ * </p>
+ *
+ * @version 2.0
  */
 public class RegisterImpl implements Register {
+
+    /**
+     * The engine
+     * The register has to be able to interact with it to have access to the Commands.
+     */
     private EditingEngine engine;
+
+    /**
+     * The IHM
+     * The register has to be able to interact with it to have access to the Commands.
+     */
     private IHMInvoker ihm;
 
-    // List of Memento
+    /**
+     * The list of Memento
+     * Needed to replay the sequence
+     */
     private LinkedList<Memento> mementos;
-    // Boolean Record is active or not
+
+    /**
+     * To know if the user is running the register.
+     */
     private boolean isRecorded;
 
+    /**
+     * Constructor of RegisterImpl
+     * Instanciate the engine, the IHM, an empty list of Memento and put false to isRecorded.
+     *
+     * @param engine
+     *  EditingEngine
+     * @param ihm
+     *  IHMInvoker
+     */
     public RegisterImpl(EditingEngine engine, IHMInvoker ihm) {
         this.engine = engine;
         this.ihm = ihm;
@@ -28,17 +58,32 @@ public class RegisterImpl implements Register {
         this.isRecorded = false;
     }
 
+    /**
+     * runRecord method
+     * Run the recording of the sequence of Commands.
+     */
     public void runRecord() {
         System.out.println("Start recorded");
         this.mementos.clear();
         this.isRecorded = true;
     }
 
+    /**
+     * stopRecord method
+     * Stop the recording of the sequence of Commands.
+     */
     public void stopRecord() {
         System.out.println("Stop recorded");
         this.isRecorded = false;
     }
 
+    /**
+     * record method
+     * Record the sequence of Commands.
+     *
+     * @param c
+     *  The sequence of saved ConcreteCommands
+     */
     public void record(CommandRegister c) {
         // If button REC is active
         if (isRecorded) {
@@ -47,10 +92,21 @@ public class RegisterImpl implements Register {
         }
     }
 
+    /**
+     * record method
+     * Check if the user is running the record process.
+     *
+     * @return boolean
+     *  If the user is running the record or not.
+     */
     public boolean isRecorded() {
         return isRecorded;
     }
 
+    /**
+     * replay method
+     * Replay the recording of the sequence of Commands.
+     */
     public void replay() {
         // If the record is stop
         if (!isRecorded) {
@@ -66,7 +122,7 @@ public class RegisterImpl implements Register {
                         cpr.setMemento(m);
                         break;
                     case "CutCommand":
-                        CutRegister cur = new CutRegister(this.engine, this);
+                        CutCommandRegister cur = new CutCommandRegister(this.engine, this);
                         cur.setMemento(m);
                         break;
                     case "PasteCommand":

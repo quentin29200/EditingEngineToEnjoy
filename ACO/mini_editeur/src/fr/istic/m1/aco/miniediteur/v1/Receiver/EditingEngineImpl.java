@@ -34,7 +34,7 @@ public class EditingEngineImpl extends Observable implements EditingEngine  {
 
     /**
      * Constructor of the EditingEngineImpl
-     * Initialize a new Buffer, a new Clipboard and a new Select object.
+     * Initialize a new Buffer, a new Clipboard and a new SelectCommand object.
      */
     public EditingEngineImpl() {
       this.buffer = new Buffer();
@@ -88,10 +88,10 @@ public class EditingEngineImpl extends Observable implements EditingEngine  {
 
     /**
      * returnSelect method
-     * Get the object Select used with our engine.
+     * Get the object SelectCommand used with our engine.
      *
-     * @return Select
-     *  Object Select
+     * @return SelectCommand
+     *  Object SelectCommand
      */
     public Select returnSelect() {
         return this.select;
@@ -142,7 +142,7 @@ public class EditingEngineImpl extends Observable implements EditingEngine  {
 
     /**
      * copy method
-     * Copy the content of the selection and put it inside the clipboard.
+     * CopyCommand the content of the selection and put it inside the clipboard.
      * It doesn't remove the content of the current selection.
      */
     public void copy() {
@@ -156,7 +156,7 @@ public class EditingEngineImpl extends Observable implements EditingEngine  {
 
     /**
      * cut method
-     * Cut the content of the selection and put it inside the clipboard.
+     * CutCommand the content of the selection and put it inside the clipboard.
      * It removes the content of the current selection.
      */
     public void cut() {
@@ -197,7 +197,7 @@ public class EditingEngineImpl extends Observable implements EditingEngine  {
 
     /**
      * paste method
-     * Paste the content of the clipboard and put it inside the buffer.
+     * PasteCommand the content of the clipboard and put it inside the buffer.
      * It doesn't remove the content of the current clipboard.
      */
     public void paste() {
