@@ -45,7 +45,7 @@ public class IHMInvoker extends JFrame  implements Observer {
 	/**
 	 * The last character written by the user.
 	 */
-    private char lastchar;
+    private String lastchar;
 
 	/**
 	 * The cut Command - Call the Command interface.
@@ -157,11 +157,17 @@ public class IHMInvoker extends JFrame  implements Observer {
         // Method to execute the enterTextCommand or the removeTextCommand action
 		textArea.addKeyListener(new KeyListener() {
             public void keyTyped(KeyEvent e) {
-                e.consume();
-                lastchar = e.getKeyChar();
-                if (lastchar != '\b') {
-                    enterTextCommand.execute();
-                }
+				e.consume();
+				lastchar = String.valueOf(e.getKeyChar());
+				if ((int)e.getKeyChar() == KeyEvent.VK_ENTER) {
+					lastchar = "\n";
+				}
+				if((int)e.getKeyChar() == KeyEvent.VK_BACK_SPACE ||(int)e.getKeyChar() == KeyEvent.VK_DELETE) {
+					return;
+				}
+				if(!e.isActionKey()) {
+					enterTextCommand.execute();
+				}
             }
 
             public void keyReleased(KeyEvent e) {
@@ -226,7 +232,7 @@ public class IHMInvoker extends JFrame  implements Observer {
 	public JTextArea getTextArea() { return textArea; }
 
     // Return the last character written by the user
-    public char getLastchar() { return lastchar; }
+    public String getLastchar() { return lastchar; }
 
     // Update the content of the buffer, the JTextArea and the position of the caret
     public void update(Observable o, Object arg) {
