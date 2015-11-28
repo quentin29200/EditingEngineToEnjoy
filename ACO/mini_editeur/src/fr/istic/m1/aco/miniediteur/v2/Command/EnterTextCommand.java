@@ -15,8 +15,9 @@ public class EnterTextCommand implements Command {
 
 
 	public void execute() {
+		System.out.println("EnterTxtCommand // caret à : "+this.ihm.getTextArea().getCaretPosition());
 		System.out.println("Text of area : "+this.ihm.getTextArea().getText());
-		char c = this.ihm.getLastchar();
+		String c = this.ihm.getLastchar();
 		System.out.println("Char enter : "+c);
 		this.engine.enterchar(c);
 	}

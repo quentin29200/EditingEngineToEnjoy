@@ -7,7 +7,7 @@ public interface EditingEngine {
    public void cut();
    public void select(int start, int length);
    public Select returnSelect();
-   public void enterchar(char c);
+   public void enterchar(String c);
    public void remove();
    public Buffer getBuffer();
 }

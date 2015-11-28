@@ -34,7 +34,7 @@ import javax.swing.event.CaretListener;
 public class IHMInvoker extends JFrame  implements Observer
 {
 	private JTextArea textArea;
-    private char lastchar;
+    private String lastchar;
 	private boolean isRecorded;
 
 	/* List of command */
@@ -170,15 +170,24 @@ public class IHMInvoker extends JFrame  implements Observer
 		textArea.addCaretListener(caret);
 		textArea.addKeyListener(new KeyListener() {
 			public void keyTyped(KeyEvent e) {
-                e.consume();
-				lastchar = e.getKeyChar();
-				if (lastchar != '\b') {
+				e.consume();
+				lastchar = String.valueOf(e.getKeyChar());
+				if ((int)e.getKeyChar() == KeyEvent.VK_ENTER) {
+					System.out.println("Yolo Enter");
+					lastchar = "\n";
+				}
+				if((int)e.getKeyChar() == KeyEvent.VK_BACK_SPACE ||(int)e.getKeyChar() == KeyEvent.VK_DELETE) {
+					return;
+				}
+				if(!e.isActionKey()) {
+					System.out.println("Yili");
 					if (isRecorded) {
-                        entertxtrec.execute();
+						entertxtrec.execute();
 					} else {
-                        enterTextCommand.execute();
+						enterTextCommand.execute();
 					}
 				}
+
 			}
 
 			public void keyReleased(KeyEvent e) {
@@ -270,14 +279,27 @@ public class IHMInvoker extends JFrame  implements Observer
 		return textArea;
 	}
 
-    public char getLastchar() {
+    public String getLastchar() {
         return lastchar;
     }
 
     public void update(Observable o, Object arg) {
 		System.out.println("Update IHM");
 		if(o instanceof EditingEngine){
-			this.textArea.setText(((EditingEngine) o).getBuffer().toString());
+			EditingEngine engine = (EditingEngine)o;
+			final String txt = engine.getBuffer().getAreaTxt().toString();
+			final int start = engine.returnSelect().getBegin();
+			final int end = start + engine.returnSelect().getLength();
+
+			SwingUtilities.invokeLater(new Runnable() {
+				public void run() {
+					textArea.setText(txt);
+					textArea.setCaretPosition(start);
+					textArea.moveCaretPosition(end);
+					System.out.println("position curseur moteur" + start);
+					System.out.println("position curseur ihm" + end);
+				}
+			});
 		}
 	}
 }

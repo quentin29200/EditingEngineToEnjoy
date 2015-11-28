@@ -125,7 +125,7 @@ public class TestEditingEngineImpl {
 		StringBuffer firstBufferContent = new StringBuffer(firstContentBufferString);
 		bf.setAreaTxt(firstBufferContent);
 
-		engine.enterchar('A');
+		engine.enterchar("A");
 
 		String contentBufferAfterPaste = bf.getAreaTxt().toString();
 
@@ -135,7 +135,7 @@ public class TestEditingEngineImpl {
 		// Test 2 Replace Select by Char
 		bf.setAreaTxt(new StringBuffer(firstContentBufferString));
 		engine.select(firstContentBufferString.length()-10,10);
-		engine.enterchar('A');
+		engine.enterchar("A");
 		String contentBufferAfterPaste2 = bf.getAreaTxt().toString();
 
 		String resultbuffer2 = "The roses are red, the violets are blue, the fish is flying and parrots are A";

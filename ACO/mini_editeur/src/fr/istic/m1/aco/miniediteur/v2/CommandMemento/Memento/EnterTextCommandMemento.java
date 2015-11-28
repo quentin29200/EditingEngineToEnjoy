@@ -7,13 +7,13 @@ import fr.istic.m1.aco.miniediteur.v2.Command.Command;
  */
 public class EnterTextCommandMemento implements Memento {
     private String name="EnterTextCommand";
-    private char lastchar;
+    private String lastchar;
 
-    public EnterTextCommandMemento(char lastchar) {
+    public EnterTextCommandMemento(String lastchar) {
         this.lastchar = lastchar;
     }
 
-    public char getLastchar() {
+    public String getLastchar() {
         return lastchar;
     }
 

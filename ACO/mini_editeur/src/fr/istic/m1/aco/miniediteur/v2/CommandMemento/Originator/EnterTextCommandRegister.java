@@ -29,11 +29,16 @@ public class EnterTextCommandRegister extends EnterTextCommand implements Comman
 
     public Memento getMemento() {
         System.out.println("EnterTextCommandRegister : Enregistrement dans le Memento");
-        return new EnterTextCommandMemento(this.ihm.getLastchar());
+        System.out.println("Dernier char rentré dans le memento : "+this.ihm.getLastchar().hashCode());
+        if (this.ihm.getLastchar().hashCode()==10) {
+            return new EnterTextCommandMemento(" ");
+        } else {
+            return new EnterTextCommandMemento(this.ihm.getLastchar());
+        }
     }
 
     public void setMemento(Memento m) {
-        char c = ((EnterTextCommandMemento)m).getLastchar();
+        String c = ((EnterTextCommandMemento)m).getLastchar();
         System.out.println("EnterTextCommandRegister : Execute une commande enregistrée");
         this.engine.enterchar(c);
     }
