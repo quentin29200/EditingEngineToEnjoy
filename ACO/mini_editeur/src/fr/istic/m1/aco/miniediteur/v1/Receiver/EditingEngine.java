@@ -31,12 +31,20 @@ public interface EditingEngine {
    /**
     * select method
     * Highlight a string content which could be copy, cut or paste.
+    *
+    * @param start
+    *   Beginning of the selection
+    * @param length
+    *   Length of the selection
     */
    public void select(int start, int length);
 
    /**
     * enterchar method
     * Add a new character in the JTextArea and add it into the buffer too.
+    *
+    * @param c
+    *   Character entered
     */
    public void enterchar(char c);
 

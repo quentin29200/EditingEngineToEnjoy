@@ -61,6 +61,9 @@ public class Select {
     /**
      * setSelect method
      * Set the length of the selection.
+     *
+     * @param length
+     *   Length of the selection
      */
     public void setLength(int length) {
         if (length > 0) {
