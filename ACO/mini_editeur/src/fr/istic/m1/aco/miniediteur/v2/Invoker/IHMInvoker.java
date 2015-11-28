@@ -12,8 +12,6 @@ package fr.istic.m1.aco.miniediteur.v2.Invoker;
  */
 import fr.istic.m1.aco.miniediteur.v2.Command.*;
 import fr.istic.m1.aco.miniediteur.v2.CommandMemento.Originator.*;
-import fr.istic.m1.aco.miniediteur.v2.Receiver.Cartaker.Register;
-import fr.istic.m1.aco.miniediteur.v2.Receiver.Cartaker.RegisterImpl;
 import fr.istic.m1.aco.miniediteur.v2.Receiver.EditingEngine;
 import fr.istic.m1.aco.miniediteur.v2.Receiver.EditingEngineImpl;
 
@@ -80,15 +78,6 @@ public class IHMInvoker extends JFrame  implements Observer
 		JButton button_record = new JButton();
 		JButton button_replay = new JButton();
 		this.textArea = new JTextArea();
-		JMenuBar menu = new JMenuBar();
-		JMenu menu_file = new JMenu();
-		JMenuItem menu_file_quit = new JMenuItem();
-		JMenu menu_edit = new JMenu();
-		JMenuItem menu_edit_copy = new JMenuItem();
-		JMenuItem menu_edit_cut = new JMenuItem();
-		JMenuItem menu_edit_paste = new JMenuItem();
-		JMenu menu_about = new JMenu();
-		JMenuItem menu_about_aboutus = new JMenuItem();
 
 	    setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 	    setTitle("EditingEngine to enjoy !");
@@ -268,10 +257,6 @@ public class IHMInvoker extends JFrame  implements Observer
 			cut.execute();
 		}
 	}
-
-	private void menu_edit_cutActionPerformed(java.awt.event.ActionEvent evt) {
-		System.out.println("menu_edit_cutActionPerformed called in IHMInvoker YEAAAAAH");
-    }
 
 	public int getselectstart() {
 		return this.textArea.getSelectionStart();
