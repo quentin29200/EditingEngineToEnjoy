@@ -102,21 +102,25 @@ public class EditingEngineImpl extends Observable implements EditingEngine  {
      * Add a new character (and not a String) in the JTextArea.
      * Add it to the buffer and handle the caret/selection position.
      */
-    public void enterchar(char c) {
+    public void enterchar(String c) {
        int begin = this.select.getBegin();
       // String text;
-       if (this.select.getLength() == 0) {
-           //text = this.buffer.getAreaTxt().substring(0, begin) + c + this.buffer.getAreaTxt().substring(begin);
-           this.buffer.getAreaTxt().insert(begin, Character.toString(c));
-           this.select.setBegin(begin + 1);
-           System.out.println("Selection changée à "+this.select.getBegin());
-       } else {
-           //text = this.buffer.getAreaTxt().substring(0, begin) + c + this.buffer.getAreaTxt().substring(begin + this.select.getLength());
-           this.buffer.getAreaTxt().replace(begin, begin + this.select.getLength(), Character.toString(c) );
-           this.select.setBegin(begin + 1);
-           this.select.setLength(0);
-           System.out.println("Add / Before Buffer : "+this.buffer.getAreaTxt().toString());
-       }
+        if(c=="\n") {
+            this.buffer.getAreaTxt().append(c);
+        } else {
+            if (this.select.getLength() == 0) {
+                //text = this.buffer.getAreaTxt().substring(0, begin) + c + this.buffer.getAreaTxt().substring(begin);
+                this.buffer.getAreaTxt().insert(begin, c);
+                this.select.setBegin(begin + 1);
+                System.out.println("Selection changée à " + this.select.getBegin());
+            } else {
+                //text = this.buffer.getAreaTxt().substring(0, begin) + c + this.buffer.getAreaTxt().substring(begin + this.select.getLength());
+                this.buffer.getAreaTxt().replace(begin, begin + this.select.getLength(), c);
+                this.select.setBegin(begin + 1);
+                this.select.setLength(0);
+                System.out.println("Add / Before Buffer : " + this.buffer.getAreaTxt().toString());
+            }
+        }
        System.out.println("Add / After Buffer : " + this.buffer.getAreaTxt().toString());
        this.setChanged();
        notifyObservers();

@@ -51,8 +51,8 @@ public class EnterTextCommand implements Command {
      */
 	public void execute() {
 		System.out.println("Text of the area : " + this.ihm.getTextArea().getText());
-		char c = this.ihm.getLastchar();
-		System.out.println("Char entered : " + c);
+		String c = this.ihm.getLastchar();
+		System.out.println("Char entered : "+c);
 		this.engine.enterchar(c);
 	}
 }

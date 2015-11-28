@@ -46,7 +46,7 @@ public interface EditingEngine {
     * @param c
     *   Character entered
     */
-   public void enterchar(char c);
+   public void enterchar(String c);
 
    /**
     * remove method
