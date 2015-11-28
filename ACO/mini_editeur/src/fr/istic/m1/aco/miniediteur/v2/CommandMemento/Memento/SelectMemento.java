@@ -6,7 +6,7 @@ import fr.istic.m1.aco.miniediteur.v2.Command.Command;
  * Created by Quentin on 21/11/2015.
  */
 public class SelectMemento implements Memento {
-    private String name="Select";
+    private String name="SelectCommand";
     private int select_start;
     private int select_lenght;
 
