@@ -12,6 +12,8 @@ package fr.istic.m1.aco.miniediteur.v2.Invoker;
  */
 import fr.istic.m1.aco.miniediteur.v2.Command.*;
 import fr.istic.m1.aco.miniediteur.v2.CommandMemento.Originator.*;
+import fr.istic.m1.aco.miniediteur.v2.Receiver.Cartaker.Register;
+import fr.istic.m1.aco.miniediteur.v2.Receiver.Cartaker.RegisterImpl;
 import fr.istic.m1.aco.miniediteur.v2.Receiver.EditingEngine;
 import fr.istic.m1.aco.miniediteur.v2.Receiver.EditingEngineImpl;
 
@@ -54,7 +56,6 @@ public class IHMInvoker extends JFrame  implements Observer
 	private CommandRegister pasterec;
 	private CommandRegister entertxtrec;
 	private CommandRegister removetxtrec;
-	private CommandRegister selectrec;
 
 	/**
 	 *  INITIALIZE IHM
@@ -174,24 +175,19 @@ public class IHMInvoker extends JFrame  implements Observer
 				int j = Math.max(e.getDot(), e.getMark());
 				int l = j - i;
 				select.setSelect(i, l);
-				if (isRecorded) {
-					selectrec.execute();
-				} else {
-					System.out.println("Up select");
-					select.execute();
-				}
+				select.execute();
 			}
 		};
 		textArea.addCaretListener(caret);
 		textArea.addKeyListener(new KeyListener() {
 			public void keyTyped(KeyEvent e) {
-				e.consume();
+                e.consume();
 				lastchar = e.getKeyChar();
 				if (lastchar != '\b') {
 					if (isRecorded) {
-						entertxtrec.execute();
+                        entertxtrec.execute();
 					} else {
-						enterTextCommand.execute();
+                        enterTextCommand.execute();
 					}
 				}
 			}
@@ -202,59 +198,13 @@ public class IHMInvoker extends JFrame  implements Observer
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
 					if (isRecorded) {
-						removetxtrec.execute();
+                        removetxtrec.execute();
 					} else {
-						removeTextCommand.execute();
+                        removeTextCommand.execute();
 					}
 				}
 			}
 		});
-
-	    menu.setBackground(new java.awt.Color(153, 153, 153));
-	    menu.setForeground(new java.awt.Color(255, 255, 255));
-	    menu.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-	    menu.setPreferredSize(new java.awt.Dimension(253, 30));
-
-	    menu_file.setText("File");
-	    menu_file.setToolTipText("");
-	    menu_file.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
-	    menu_file.setIconTextGap(30);
-
-	    menu_file_quit.setText("Quit");
-	    menu_file.add(menu_file_quit);
-
-		menu.add(menu_file);
-
-	    menu_edit.setText("Edit");
-	    menu_edit.setIconTextGap(30);
-
-	    menu_edit_copy.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_COPY, 0));
-	    menu_edit_copy.setText("Copy");
-	    menu_edit.add(menu_edit_copy);
-
-	    menu_edit_cut.setText("Cut");
-	    menu_edit_cut.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				menu_edit_cutActionPerformed(evt);
-			}
-		});
-	    menu_edit.add(menu_edit_cut);
-
-	    menu_edit_paste.setText("Paste");
-	    menu_edit.add(menu_edit_paste);
-
-		menu.add(menu_edit);
-
-	    menu_about.setText("About");
-	    menu_about.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-	    menu_about.setIconTextGap(30);
-
-	    menu_about_aboutus.setText("About us ...");
-	    menu_about.add(menu_about_aboutus);
-
-		menu.add(menu_about);
-
-	    setJMenuBar(menu);
 
         this.getContentPane().add(content);
 
@@ -286,7 +236,6 @@ public class IHMInvoker extends JFrame  implements Observer
 		this.cutrec = h.get("cutrec");
 		this.copyrec = h.get("copyrec");
 		this.pasterec = h.get("pasterec");
-		this.selectrec = h.get("selectrec");
 	}
 
 
@@ -343,20 +292,7 @@ public class IHMInvoker extends JFrame  implements Observer
     public void update(Observable o, Object arg) {
 		System.out.println("Update IHM");
 		if(o instanceof EditingEngine){
-			EditingEngine engine = (EditingEngine)o;
-			final String txt = engine.getBuffer().getAreaTxt().toString();
-			final int start = engine.returnSelect().getBegin();
-			final int end = start + engine.returnSelect().getLength();
-
-			SwingUtilities.invokeLater(new Runnable() {
-				public void run() {
-					textArea.setText(txt);
-					textArea.setCaretPosition(start);
-					//textArea.moveCaretPosition(end);
-					System.out.println("position curseur moteur" + start);
-					System.out.println("position curseur ihm" + end);
-				}
-			});
+			this.textArea.setText(((EditingEngine) o).getBuffer().toString());
 		}
 	}
 }
