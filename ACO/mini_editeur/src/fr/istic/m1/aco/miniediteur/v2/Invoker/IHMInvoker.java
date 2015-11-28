@@ -88,7 +88,7 @@ public class IHMInvoker extends JFrame  implements Observer
 	    setName("superFrame"); // NOI18N
 	    setResizable(false);
 
-	    //button_cut.setText("Cut");
+	    //button_cut.setText("CutCommand");
 		button_cut.setIcon(img_cut);
 	    button_cut.addActionListener(new java.awt.event.ActionListener() {
 	        public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -96,7 +96,7 @@ public class IHMInvoker extends JFrame  implements Observer
 	        }
 	    });
 
-	    //button_paste.setText("Paste");
+	    //button_paste.setText("PasteCommand");
         button_paste.setIcon(img_paste);
 		button_paste.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -104,7 +104,7 @@ public class IHMInvoker extends JFrame  implements Observer
 			}
 		});
 
-	    //button_copy.setText("Copy");
+	    //button_copy.setText("CopyCommand");
         button_copy.setIcon(img_copy);
 		button_copy.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {

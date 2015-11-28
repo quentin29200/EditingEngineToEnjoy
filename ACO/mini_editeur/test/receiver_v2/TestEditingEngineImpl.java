@@ -18,7 +18,7 @@ public class TestEditingEngineImpl {
 		StringBuffer firstBufferContent = new StringBuffer(firstContentBufferString);
 		bf.setAreaTxt(firstBufferContent);
 
-		// Select word to paste
+		// SelectCommand word to paste
 		engine.select(firstContentBufferString.length()-23,8);
 
 		// Call the copy method
@@ -58,7 +58,7 @@ public class TestEditingEngineImpl {
 		StringBuffer firstBufferContent = new StringBuffer(firstContentBufferString);
 		bf.setAreaTxt(firstBufferContent);
 
-		// Select word to paste
+		// SelectCommand word to paste
 		engine.select(firstContentBufferString.length()-11,11);
 
 		// Call the copy method
@@ -132,7 +132,7 @@ public class TestEditingEngineImpl {
 		String resultbuffer = "The roses are red, the violets are blue, the fish is flying and parrots are vegetablesA";
 		assertTrue(null, contentBufferAfterPaste.equals(resultbuffer));
 
-		// Test 2 Replace Select by Char
+		// Test 2 Replace SelectCommand by Char
 		bf.setAreaTxt(new StringBuffer(firstContentBufferString));
 		engine.select(firstContentBufferString.length()-10,10);
 		engine.enterchar('A');

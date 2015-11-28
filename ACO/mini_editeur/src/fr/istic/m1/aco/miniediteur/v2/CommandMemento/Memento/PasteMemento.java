@@ -6,7 +6,7 @@ import fr.istic.m1.aco.miniediteur.v2.Command.Command;
  * Created by Quentin on 21/11/2015.
  */
 public class PasteMemento implements Memento {
-    private String name="Paste";
+    private String name="PasteCommand";
 
     public String getCmd() {
         return this.name;

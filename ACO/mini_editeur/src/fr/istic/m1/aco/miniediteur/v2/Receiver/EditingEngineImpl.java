@@ -95,7 +95,7 @@ public class EditingEngineImpl extends Observable implements EditingEngine  {
         if( this.select.getLength()>0 ) {
             // Set the clipboard with the value of the selection
             this.clipboard.setCb( this.getselect() );
-            System.out.println("Copy the following string in the clipboard : " + this.getselect());
+            System.out.println("CopyCommand the following string in the clipboard : " + this.getselect());
         }
     }
 

@@ -61,15 +61,15 @@ public class RegisterImpl implements Register {
                 String cmd = m.getCmd();
                 System.out.println("Commande à executer : "+cmd);
                 switch (cmd) {
-                    case "Copy":
+                    case "CopyCommand":
                         CopyRegister cpr = new CopyRegister(this.engine, this);
                         cpr.setMemento(m);
                         break;
-                    case "Cut":
+                    case "CutCommand":
                         CutRegister cur = new CutRegister(this.engine, this);
                         cur.setMemento(m);
                         break;
-                    case "Paste":
+                    case "PasteCommand":
                         PasteRegister pr = new PasteRegister(this.engine, this);
                         pr.setMemento(m);
                         break;
@@ -81,7 +81,7 @@ public class RegisterImpl implements Register {
                         RemoveTextCommandRegister rmr = new RemoveTextCommandRegister(this.engine, this.ihm, this);
                         rmr.setMemento(m);
                         break;
-                    case "Select":
+                    case "SelectCommand":
                         SelectRegister sr = new SelectRegister(this.engine, this.ihm, this);
                         sr.setMemento(m);
                         break;

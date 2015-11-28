@@ -1,254 +1,236 @@
-/**
- * ==================================================================================
- * PACKAGE
- * ==================================================================================
- */
 package fr.istic.m1.aco.miniediteur.v1.Invoker;
 
-/**
- * ==================================================================================
- * IMPORTS
- * ==================================================================================
- */
 import fr.istic.m1.aco.miniediteur.v1.Command.*;
-import fr.istic.m1.aco.miniediteur.v1.Command.Select;
+import fr.istic.m1.aco.miniediteur.v1.Command.SelectCommand;
 import fr.istic.m1.aco.miniediteur.v1.Receiver.*;
 
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.Collection;
 import java.util.Observable;
 import java.util.Observer;
 
 import javax.swing.*;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-
 
 /**
- * ==================================================================================
- * CLASS START
- * ==================================================================================
+ * <b>IHMInvoker is an Invoker (DP Command)</b>
+ * <p>
+ * Used as the user interface.
+ * Extends JFrame for the interface.
+ * Implements Observer to call the actions on click.
+ * </p>
+ *
+ * @version 1.0
  */
-public class IHMInvoker extends JFrame  implements Observer
-{
+public class IHMInvoker extends JFrame  implements Observer {
+
+	/**
+	 * The JTextArea
+	 * Contains the text written by the user.
+	 */
 	private JTextArea textArea;
+
+	/**
+	 * The editing engine
+	 * Permits to interact with the engine.
+	 *
+	 * @see EditingEngine
+	 */
 	private EditingEngineImpl engine;
+
+	/**
+	 * The last character written by the user.
+	 */
     private char lastchar;
+
+	/**
+	 * The cut Command - Call the Command interface.
+	 */
 	private Command cut;
+
+    /**
+     * The copy Command - Call the Command interface.
+     */
 	private Command copy;
+
+    /**
+     * The paste Command - Call the Command interface.
+     */
 	private Command paste;
-	private Select select;
+
+    /**
+     * The select Command - Call the Command interface.
+     */
+	private SelectCommand select;
+
+    /**
+     * The enterTextCommand Command - Call the Command interface.
+     */
 	private Command enterTextCommand;
+
+    /**
+     * The removeTextCommand Command - Call the Command interface.
+     */
 	private Command removeTextCommand;
 
-
+    /**
+     * Constructor of the user interface.
+     * Bind the engine and the IHM.
+     *
+     * @param e
+     *  EditingEngineImpl - Implements EditingEngine
+     */
 	public IHMInvoker(EditingEngineImpl e) {
-		// Initialisation du moteur
+
+		// Engine initialisation
 		this.engine = e;
 		this.engine.addObserver(this);
 
-		// Initialisation des commandes
+		// Commands initialisation
 		this.enterTextCommand = new EnterTextCommand(this.engine, this);
 		this.removeTextCommand = new RemoveTextCommand(this.engine, this);
-		this.select = new Select(this.engine, this);
-		this.cut = new Cut(this.engine);
-		this.copy = new Copy(this.engine);
-		this.paste = new Paste(this.engine);
+		this.select = new SelectCommand(this.engine, this);
+		this.cut = new CutCommand(this.engine);
+		this.copy = new CopyCommand(this.engine);
+		this.paste = new PasteCommand(this.engine);
 
-		// Initialisation de l'interface
+		// Buttons and JTestArea intanciation
 		JButton button_cut = new JButton();
 		JButton button_paste = new JButton();
 		JButton button_copy = new JButton();
 		this.textArea = new JTextArea();
-		JMenuBar menu = new JMenuBar();
-		JMenu menu_file = new JMenu();
-		JMenuItem menu_file_quit = new JMenuItem();
-		JMenu menu_edit = new JMenu();
-		JMenuItem menu_edit_copy = new JMenuItem();
-		JMenuItem menu_edit_cut = new JMenuItem();
-		JMenuItem menu_edit_paste = new JMenuItem();
-		JMenu menu_about = new JMenu();
-		JMenuItem menu_about_aboutus = new JMenuItem();
 
-	    setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-	    setTitle("EditingEngine to enjoy !");
-	    setFont(new java.awt.Font("Mangal", 0, 14)); // NOI18N
-	    setLocation(new java.awt.Point(300, 300));
-	    setMaximumSize(new java.awt.Dimension(557, 410));
-	    setMinimumSize(new java.awt.Dimension(557, 410));
-	    setName("superFrame"); // NOI18N
-	    setResizable(false);
+        // Add a vertical scrllbar in case there is too much content
+        JScrollPane verticalScroll = new JScrollPane(this.textArea);
+        verticalScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        this.add(verticalScroll);
 
+        // Frame settings
+	    this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        this.setTitle("EditingEngine to enjoy !");
+        this.setFont(new java.awt.Font("Mangal", 0, 14));
+        this.setLocation(new java.awt.Point(300, 300));
+        this.setMaximumSize(new Dimension(557, 410));
+        this.setMinimumSize(new Dimension(557, 410));
+        this.setName("superFrame");
+        this.setResizable(false);
+
+        // Add the cut button and the call to its action
 	    button_cut.setText("Cut");
-	    button_cut.addActionListener(new java.awt.event.ActionListener() {
-	        public void actionPerformed(java.awt.event.ActionEvent evt) {
-	            button_cutActionPerformed(evt);
-	        }
+	    button_cut.addActionListener(new ActionListener() {
+	        public void actionPerformed(ActionEvent evt) { button_cutActionPerformed(evt); }
 	    });
 
+        // Add the paste button and the call to its action
 	    button_paste.setText("Paste");
-		button_paste.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				button_pasteActionPerformed(evt);
-			}
+		button_paste.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) { button_pasteActionPerformed(evt); }
 		});
 
+        // Add the copy button and the call to its action
 	    button_copy.setText("Copy");
-		button_copy.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				button_copyActionPerformed(evt);
-			}
+		button_copy.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) { button_copyActionPerformed(evt); }
 		});
 
+        // Go to the next line when the content is too long.
 		textArea.setLineWrap(true);
-		textArea.setToolTipText("");
+
+        // Add an ActionListener on the caret
 		CaretListener caret = new CaretListener() {
 			public void caretUpdate(CaretEvent e) {
 				int i = Math.min(e.getDot(), e.getMark());
 				int j = Math.max(e.getDot(), e.getMark());
 				int l = j - i;
 				select.setSelect(i, l);
-				select.execute();
+                select.execute();
 			}
 		};
+
+        // Link the caretListener and the JTextArea
 		textArea.addCaretListener(caret);
+
+        // Method to execute the enterTextCommand or the removeTextCommand action
 		textArea.addKeyListener(new KeyListener() {
-			public void keyTyped(KeyEvent e) {
+            public void keyTyped(KeyEvent e) {
                 e.consume();
-				lastchar = e.getKeyChar();
-				if (lastchar != '\b') {
-					enterTextCommand.execute();
-				}
-			}
+                lastchar = e.getKeyChar();
+                if (lastchar != '\b') {
+                    enterTextCommand.execute();
+                }
+            }
 
-			public void keyReleased(KeyEvent e) {
-			}
+            public void keyReleased(KeyEvent e) {
+            }
 
-			public void keyPressed(KeyEvent e) {
-				if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
-					removeTextCommand.execute();
-				}
-			}
-		});
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
+                    removeTextCommand.execute();
+                }
+            }
+        });
 
-	    menu.setBackground(new java.awt.Color(153, 153, 153));
-	    menu.setForeground(new java.awt.Color(255, 255, 255));
-	    menu.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-	    menu.setPreferredSize(new java.awt.Dimension(253, 30));
-
-	    menu_file.setText("File");
-	    menu_file.setToolTipText("");
-	    menu_file.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
-	    menu_file.setIconTextGap(30);
-
-	    menu_file_quit.setText("Quit");
-	    menu_file.add(menu_file_quit);
-
-	    menu.add(menu_file);
-
-	    menu_edit.setText("Edit");
-	    menu_edit.setIconTextGap(30);
-
-	    menu_edit_copy.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_COPY, 0));
-	    menu_edit_copy.setText("Copy");
-	    menu_edit.add(menu_edit_copy);
-
-	    menu_edit_cut.setText("Cut");
-	    menu_edit_cut.addActionListener(new java.awt.event.ActionListener() {
-	        public void actionPerformed(java.awt.event.ActionEvent evt) {
-	            menu_edit_cutActionPerformed(evt);
-	        }
-	    });
-	    menu_edit.add(menu_edit_cut);
-
-	    menu_edit_paste.setText("Paste");
-	    menu_edit.add(menu_edit_paste);
-
-	    menu.add(menu_edit);
-
-	    menu_about.setText("About");
-	    menu_about.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-	    menu_about.setIconTextGap(30);
-
-	    menu_about_aboutus.setText("About us ...");
-	    menu_about.add(menu_about_aboutus);
-
-	    menu.add(menu_about);
-
-	    setJMenuBar(menu);
-
-	    javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        // Join the elements in a GroupLayout
+	    GroupLayout layout = new GroupLayout(getContentPane());
 	    getContentPane().setLayout(layout);
 	    layout.setHorizontalGroup(
-	        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-	        .addGroup(layout.createSequentialGroup()
-	            .addContainerGap()
-	            .addComponent(button_copy, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
-	            .addGap(126, 126, 126)
-	            .addComponent(button_cut, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
-	            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-	            .addComponent(button_paste, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
-	            .addContainerGap())
-	        .addGroup(layout.createSequentialGroup()
-	            .addGap(24, 24, 24)
-	            .addComponent(textArea, javax.swing.GroupLayout.PREFERRED_SIZE, 501, javax.swing.GroupLayout.PREFERRED_SIZE)
-	            .addContainerGap(32, Short.MAX_VALUE))
-	    );
-	    layout.setVerticalGroup(
-	        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-	        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-	            .addContainerGap(66, Short.MAX_VALUE)
-	            .addComponent(textArea, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
-	            .addGap(65, 65, 65)
-	            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-	                .addComponent(button_paste, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-	                .addComponent(button_copy, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-	                .addComponent(button_cut, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
-	            .addContainerGap())
-	    );
+                layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(button_copy, GroupLayout.PREFERRED_SIZE, 94, GroupLayout.PREFERRED_SIZE)
+                                .addGap(126, 126, 126)
+                                .addComponent(button_cut, GroupLayout.PREFERRED_SIZE, 94, GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(button_paste, GroupLayout.PREFERRED_SIZE, 94, GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap())
+                        .addGroup(layout.createSequentialGroup()
+                                .addGap(24, 24, 24)
+                                .addComponent(textArea, GroupLayout.PREFERRED_SIZE, 501, GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(32, Short.MAX_VALUE))
+        );
 
+        // Using a global Layout
+	    layout.setVerticalGroup(
+                layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addContainerGap(66, Short.MAX_VALUE)
+                                .addComponent(textArea, GroupLayout.PREFERRED_SIZE, 204, GroupLayout.PREFERRED_SIZE)
+                                .addGap(65, 65, 65)
+                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                        .addComponent(button_paste, GroupLayout.PREFERRED_SIZE, 34, GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(button_copy, GroupLayout.PREFERRED_SIZE, 34, GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(button_cut, GroupLayout.PREFERRED_SIZE, 34, GroupLayout.PREFERRED_SIZE))
+                                .addContainerGap())
+        );
+
+        // Set visible the elements of the application
 	    pack();
 	}
 
-    private void button_pasteActionPerformed(java.awt.event.ActionEvent evt) {
-		System.out.println("button_cutActionPerformed called in IHMInvoker YEAAAAAH");
-		paste.execute();
-    }
-	private void button_copyActionPerformed(java.awt.event.ActionEvent evt) {
-		System.out.println("button_cutActionPerformed called in IHMInvoker YEAAAAAH");
-		copy.execute();
-	}
-	private void button_cutActionPerformed(java.awt.event.ActionEvent evt) {
-		System.out.println("button_cutActionPerformed called in IHMInvoker YEAAAAAH");
-		cut.execute();
-	}
+    // List of the actionPerformed methods to execute the ConcreteCommand
+    private void button_pasteActionPerformed(ActionEvent evt) { paste.execute(); }
+	private void button_copyActionPerformed(ActionEvent evt) { copy.execute(); }
+	private void button_cutActionPerformed(ActionEvent evt) { cut.execute(); }
 
-	private void menu_edit_cutActionPerformed(java.awt.event.ActionEvent evt) {
-		System.out.println("menu_edit_cutActionPerformed called in IHMInvoker YEAAAAAH");
-    }
+    // Return the index of the beginning of the selection
+	public int getselectstart() { return this.textArea.getSelectionStart(); }
 
-	public int getselectstart() {
-		return this.textArea.getSelectionStart();
-	}
+    // Return the index of the ending of the selection
+	public int getselectend() { return this.textArea.getSelectionEnd(); }
 
-	public int getselectend() {
-		return this.textArea.getSelectionEnd();
-	}
+    // Return the content of the JTextArea
+	public JTextArea getTextArea() { return textArea; }
 
-	public JTextArea getTextArea() {
-		return textArea;
-	}
+    // Return the last character written by the user
+    public char getLastchar() { return lastchar; }
 
-    public char getLastchar() {
-        return lastchar;
-    }
-
+    // Update the content of the buffer, the JTextArea and the position of the caret
     public void update(Observable o, Object arg) {
 		System.out.println("Update IHM");
-		System.out.println(o.toString());
 		if(o instanceof EditingEngine){
 			EditingEngine engine = (EditingEngine)o;
 			final String txt = engine.getBuffer().getAreaTxt().toString();
