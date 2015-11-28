@@ -12,13 +12,11 @@ package fr.istic.m1.aco.miniediteur.v2.Invoker;
  */
 import fr.istic.m1.aco.miniediteur.v2.Command.*;
 import fr.istic.m1.aco.miniediteur.v2.CommandMemento.Originator.*;
-import fr.istic.m1.aco.miniediteur.v2.Receiver.Cartaker.Register;
-import fr.istic.m1.aco.miniediteur.v2.Receiver.Cartaker.RegisterImpl;
 import fr.istic.m1.aco.miniediteur.v2.Receiver.EditingEngine;
 import fr.istic.m1.aco.miniediteur.v2.Receiver.EditingEngineImpl;
 
-import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.HashMap;
@@ -82,15 +80,6 @@ public class IHMInvoker extends JFrame  implements Observer
 		JButton button_record = new JButton();
 		JButton button_replay = new JButton();
 		this.textArea = new JTextArea();
-		JMenuBar menu = new JMenuBar();
-		JMenu menu_file = new JMenu();
-		JMenuItem menu_file_quit = new JMenuItem();
-		JMenu menu_edit = new JMenu();
-		JMenuItem menu_edit_copy = new JMenuItem();
-		JMenuItem menu_edit_cut = new JMenuItem();
-		JMenuItem menu_edit_paste = new JMenuItem();
-		JMenu menu_about = new JMenu();
-		JMenuItem menu_about_aboutus = new JMenuItem();
 
 	    setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 	    setTitle("EditingEngine to enjoy !");
@@ -101,41 +90,38 @@ public class IHMInvoker extends JFrame  implements Observer
 	    setName("superFrame"); // NOI18N
 	    setResizable(false);
 
-	    //button_cut.setText("Cut");
 		button_cut.setIcon(img_cut);
-	    button_cut.addActionListener(new java.awt.event.ActionListener() {
-	        public void actionPerformed(java.awt.event.ActionEvent evt) {
+	    button_cut.addActionListener(new ActionListener() {
+	        public void actionPerformed(ActionEvent evt) {
 				button_cutActionPerformed(evt);
 	        }
 	    });
 
-	    //button_paste.setText("Paste");
         button_paste.setIcon(img_paste);
-		button_paste.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
+		button_paste.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
 				button_pasteActionPerformed(evt);
 			}
 		});
 
-	    //button_copy.setText("Copy");
         button_copy.setIcon(img_copy);
-		button_copy.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
+		button_copy.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
 				button_copyActionPerformed(evt);
 			}
 		});
 
         button_replay.setIcon(img_replay);
         button_replay.setEnabled(false);
-		button_replay.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
+		button_replay.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
 				replayregister.execute();
 			}
 		});
 
 		button_record.setIcon(img_rec);
-        button_record.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        button_record.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
                 if (isRecorded) {
                     button_record.setIcon(img_rec);
 					stopregister.execute();
@@ -208,52 +194,6 @@ public class IHMInvoker extends JFrame  implements Observer
 			}
 		});
 
-	    menu.setBackground(new java.awt.Color(153, 153, 153));
-	    menu.setForeground(new java.awt.Color(255, 255, 255));
-	    menu.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-	    menu.setPreferredSize(new java.awt.Dimension(253, 30));
-
-	    menu_file.setText("File");
-	    menu_file.setToolTipText("");
-	    menu_file.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
-	    menu_file.setIconTextGap(30);
-
-	    menu_file_quit.setText("Quit");
-	    menu_file.add(menu_file_quit);
-
-	    menu.add(menu_file);
-
-	    menu_edit.setText("Edit");
-	    menu_edit.setIconTextGap(30);
-
-	    menu_edit_copy.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_COPY, 0));
-	    menu_edit_copy.setText("Copy");
-	    menu_edit.add(menu_edit_copy);
-
-	    menu_edit_cut.setText("Cut");
-	    menu_edit_cut.addActionListener(new java.awt.event.ActionListener() {
-	        public void actionPerformed(java.awt.event.ActionEvent evt) {
-	            menu_edit_cutActionPerformed(evt);
-	        }
-	    });
-	    menu_edit.add(menu_edit_cut);
-
-	    menu_edit_paste.setText("Paste");
-	    menu_edit.add(menu_edit_paste);
-
-	    menu.add(menu_edit);
-
-	    menu_about.setText("About");
-	    menu_about.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-	    menu_about.setIconTextGap(30);
-
-	    menu_about_aboutus.setText("About us ...");
-	    menu_about.add(menu_about_aboutus);
-
-	    menu.add(menu_about);
-
-	    setJMenuBar(menu);
-
         this.getContentPane().add(content);
 
 	    pack();
@@ -316,10 +256,6 @@ public class IHMInvoker extends JFrame  implements Observer
 			cut.execute();
 		}
 	}
-
-	private void menu_edit_cutActionPerformed(java.awt.event.ActionEvent evt) {
-		System.out.println("menu_edit_cutActionPerformed called in IHMInvoker YEAAAAAH");
-    }
 
 	public int getselectstart() {
 		return this.textArea.getSelectionStart();

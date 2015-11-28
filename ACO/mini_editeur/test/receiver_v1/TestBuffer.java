@@ -36,7 +36,6 @@ public class TestBuffer {
 			String areaString = "Then a wild Roucoups appears and attacks Sacha.";
 			StringBuffer areaTxt = new StringBuffer(areaString);
 			String areaString_false = "Have you ever been ashamed to know that penguins can not shake hands?";
-			StringBuffer areaTxt_false = new StringBuffer(areaString_false);
 
 			// ToString
 			assertTrue(null, areaTxt.toString().equals(areaString));
