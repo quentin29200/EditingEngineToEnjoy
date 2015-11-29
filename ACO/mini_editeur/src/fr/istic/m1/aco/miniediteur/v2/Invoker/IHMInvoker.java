@@ -239,6 +239,7 @@ public class IHMInvoker extends JFrame  implements Observer {
 		textArea.addCaretListener(caret);
 		textArea.addKeyListener(new KeyListener() {
 			public void keyTyped(KeyEvent e) {
+                System.out.println("Action Key listener");
 				e.consume();
 				lastchar = String.valueOf(e.getKeyChar());
 				if ((int)e.getKeyChar() == KeyEvent.VK_ENTER) {
@@ -260,9 +261,11 @@ public class IHMInvoker extends JFrame  implements Observer {
 			}
 
 			public void keyReleased(KeyEvent e) {
+                System.out.println("Action Key listener2");
 			}
 
 			public void keyPressed(KeyEvent e) {
+				System.out.println("Action Key listener3");
 				if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
 					if (isRecorded) {
                         removetxtrec.execute();
@@ -338,6 +341,9 @@ public class IHMInvoker extends JFrame  implements Observer {
 
     // Return the last character written by the user
     public String getLastchar() { return lastchar; }
+
+    // Update the last character written
+    public void setLastchar(String c) { this.lastchar = c ; }
 
     // Update the content of the buffer, the JTextArea and the position of the caret
     public void update(Observable o, Object arg) {
