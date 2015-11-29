@@ -5,10 +5,8 @@ import fr.istic.m1.aco.miniediteur.v2.CommandMemento.Originator.*;
 import fr.istic.m1.aco.miniediteur.v2.Receiver.EditingEngine;
 import fr.istic.m1.aco.miniediteur.v2.Receiver.EditingEngineImpl;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.*;
+import java.awt.event.*;
 import java.util.HashMap;
 import java.util.Observable;
 import java.util.Observer;
@@ -142,14 +140,21 @@ public class IHMInvoker extends JFrame  implements Observer {
 		JButton button_record = new JButton();
 		JButton button_replay = new JButton();
 
+		// Tooltips
+		button_cut.setToolTipText("Cut");
+		button_paste.setToolTipText("Paste");
+		button_copy.setToolTipText("Copy");
+		button_record.setToolTipText("Record");
+		button_replay.setToolTipText("Replay");
+
         // Frame settings
-	    setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+	    setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 	    setTitle("EditingEngine to enjoy !");
-	    setFont(new java.awt.Font("Mangal", 0, 14)); // NOI18N
-	    setLocation(new java.awt.Point(300, 300));
-	    setMaximumSize(new java.awt.Dimension(557, 410));
-	    setMinimumSize(new java.awt.Dimension(557, 410));
-	    setName("superFrame"); // NOI18N
+	    setFont(new Font("Mangal", 0, 14));
+	    setLocation(new Point(300, 300));
+	    setMaximumSize(new Dimension(557, 410));
+	    setMinimumSize(new Dimension(557, 410));
+	    setName("superFrame");
 	    setResizable(false);
 
         // Button CUT
@@ -191,14 +196,14 @@ public class IHMInvoker extends JFrame  implements Observer {
             public void actionPerformed(ActionEvent evt) {
                 if (isRecorded) {
                     button_record.setIcon(img_rec);
-					stopregister.execute();
-					isRecorded = false;
+                    stopregister.execute();
+                    isRecorded = false;
                     button_replay.setEnabled(true);
                 } else {
                     button_record.setIcon(img_stop);
-					button_replay.setEnabled(false);
-					startregister.execute();
-					isRecorded = true;
+                    button_replay.setEnabled(false);
+                    startregister.execute();
+                    isRecorded = true;
                 }
             }
         });
@@ -224,6 +229,12 @@ public class IHMInvoker extends JFrame  implements Observer {
         textArea = new JTextArea(30, 60);
         textArea.setLineWrap(true);
         panelArea.add(textArea);
+
+        // Vertical scrollbar
+        JScrollPane vbar = new JScrollPane(textArea);
+        panelArea.add(vbar);
+
+        // Add content to the panelArea
         content.add(panelArea);
 
         // Caret settings
